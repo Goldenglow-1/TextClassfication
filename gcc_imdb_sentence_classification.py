@@ -67,7 +67,7 @@ class TextClassificationModel(nn.Module):
     def __init__(self, vocab_size=VOCAB_SIZE, embed_dim=64, num_class=2):
         super(TextClassificationModel, self).__init__()
         self.embedding = nn.EmbeddingBag(vocab_size, embed_dim, sparse=False)
-        self.fc = nn.linear(embed_dim, num_class)
+        self.fc = nn.Linear(embed_dim, num_class)
 
     def forward(self, token_index):
         embedded = self.embedding(token_index)#shape"[bs, embedding_dim]
