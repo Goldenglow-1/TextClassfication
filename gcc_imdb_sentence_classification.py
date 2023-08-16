@@ -9,7 +9,7 @@ from torchtext.data import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torchtext.data.functional import to_map_style_dataset
 
-
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 import sys
 import os
 import logging
@@ -131,6 +131,8 @@ def train(train_data_loader, eval_data_lodaer, model, optimizer, num_epoch, log_
         num_batches = len(train_data_loader)
 
         for batch_index, (target, token_index) in enumerate(train_data_loader):
+            target = target.to(device)
+            token_index = token_index.to(device)
             optimizer.zero_grad()
             step = num_batches*(epoch_index) + batch_index + 1
             logits = model(token_index)
@@ -175,7 +177,7 @@ def train(train_data_loader, eval_data_lodaer, model, optimizer, num_epoch, log_
 #4.测试代码
 if __name__ == "__main__":
     #model = GCNN()
-    model = TextClassificationModel()
+    model = TextClassificationModel().to(device)
     print("模型总参数：", sum(p.numel() for p in model.parameters()))
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
